@@ -626,6 +626,7 @@ public class MainActivity extends Activity {
                                                   boolean partnerVerified
                                                   ) {
                 /// insert code here
+                // UI blah blah
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +
