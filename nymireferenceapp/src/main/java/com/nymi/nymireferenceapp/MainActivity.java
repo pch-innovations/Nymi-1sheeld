@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
     private ListView mListViewProvisions;
 
     private RadioButton mLeds[];
+    private RadioButton NymiAuthenticated;
 
     private Button mButtonAccept;
     private Button mButtonReject;
@@ -107,6 +108,8 @@ public class MainActivity extends Activity {
         mButtonAccept = (Button) findViewById(R.id.layout_main_button_accept);
         mButtonReject = (Button) findViewById(R.id.layout_main_button_reject);
         mListViewProvisions = (ListView) findViewById(R.id.layout_main_provision_list);
+
+        NymiAuthenticated = (RadioButton) findViewById(R.id.nymiFoundStatusAutheticated);
 
 
         // -------------------- 1Sheeld setup ------------------------
@@ -626,7 +629,14 @@ public class MainActivity extends Activity {
                                                   boolean partnerVerified
                                                   ) {
                 /// insert code here
-                // UI blah blah
+                if(after==NymiDeviceInfo.FoundStatus.AUTHENTICATED)  {
+                    NymiAuthenticated.setEnabled(true);
+                    NymiAuthenticated.setChecked(true);
+                }
+                else {
+                    NymiAuthenticated.setEnabled(false);
+                    NymiAuthenticated.setChecked(false);
+                }
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +

@@ -91,7 +91,7 @@ public class AdapterProvisions extends BaseAdapter {
             } else if (state.equals(NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_UNLIKELY) ||
                     state.equals(NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_NO)) {
                 holder.mIvDeviceUnclasped.setVisibility(View.VISIBLE);
-            } else if (state.equals(NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_YES) {
+            } else if (state.equals(NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_YES)) {
                 holder.mIvDevice.setVisibility(View.VISIBLE);
             }
         }
