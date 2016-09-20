@@ -161,5 +161,13 @@
         android:layout_toEndOf="@+id/layout_main_provisions_label"
         android:layout_below="@+id/layout_main_provision_list" />
 
+    <RadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Authenticated"
+        android:id="@+id/nymiFoundStatusAutheticated"
+        android:layout_alignTop="@+id/layout_main_provision_list"
+        android:layout_alignEnd="@+id/layout_main_provision_list" />
+
 
 </RelativeLayout>

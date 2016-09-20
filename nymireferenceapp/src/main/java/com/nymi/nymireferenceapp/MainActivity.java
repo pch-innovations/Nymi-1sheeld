@@ -75,6 +75,7 @@ public class MainActivity extends Activity {
     private ListView mListViewProvisions;
 
     private RadioButton mLeds[];
+    private RadioButton NymiAuthenticated;
 
     private Button mButtonAccept;
     private Button mButtonReject;
@@ -88,6 +89,9 @@ public class MainActivity extends Activity {
     private OneSheeldManager oneSheeldManager;
     OneSheeldDevice oneSheeldDevice;
     private boolean pin13value = true;
+
+    private byte pushButtonShieldId = OneSheeldSdk.getKnownShields().PUSH_BUTTON_SHIELD.getId();
+    private byte pushButtonFunctionId = (byte) 0x01;
 
 
     @Override
@@ -108,6 +112,8 @@ public class MainActivity extends Activity {
         mButtonReject = (Button) findViewById(R.id.layout_main_button_reject);
         mListViewProvisions = (ListView) findViewById(R.id.layout_main_provision_list);
 
+        NymiAuthenticated = (RadioButton) findViewById(R.id.nymiFoundStatusAutheticated);
+
 
         // -------------------- 1Sheeld setup ------------------------
 
@@ -115,8 +121,13 @@ public class MainActivity extends Activity {
         btnSendToOneSheeld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                oneSheeldDevice.digitalWrite(13, pin13value);
+               // oneSheeldDevice.digitalWrite(13, pin13value);
+               //
+
+                ShieldFrame sf = new ShieldFrame(pushButtonShieldId, pushButtonFunctionId);
+                sf.addArgument(pin13value);
                 pin13value = !pin13value;
+                oneSheeldDevice.sendShieldFrame(sf);
             }
         });
 
@@ -626,7 +637,14 @@ public class MainActivity extends Activity {
                                                   boolean partnerVerified
                                                   ) {
                 /// insert code here
-                // UI blah blah
+                if(after==NymiDeviceInfo.FoundStatus.AUTHENTICATED)  {
+                    NymiAuthenticated.setEnabled(true);
+                    NymiAuthenticated.setChecked(true);
+                }
+                else {
+                    NymiAuthenticated.setEnabled(false);
+                    NymiAuthenticated.setChecked(false);
+                }
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +
