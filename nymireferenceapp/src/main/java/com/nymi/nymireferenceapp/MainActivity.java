@@ -90,6 +90,9 @@ public class MainActivity extends Activity {
     OneSheeldDevice oneSheeldDevice;
     private boolean pin13value = true;
 
+    private byte pushButtonShieldId = OneSheeldSdk.getKnownShields().PUSH_BUTTON_SHIELD.getId();
+    private byte pushButtonFunctionId = (byte) 0x01;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +121,13 @@ public class MainActivity extends Activity {
         btnSendToOneSheeld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                oneSheeldDevice.digitalWrite(13, pin13value);
+               // oneSheeldDevice.digitalWrite(13, pin13value);
+               //
+
+                ShieldFrame sf = new ShieldFrame(pushButtonShieldId, pushButtonFunctionId);
+                sf.addArgument(pin13value);
                 pin13value = !pin13value;
+                oneSheeldDevice.sendShieldFrame(sf);
             }
         });
 
