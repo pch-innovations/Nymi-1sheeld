@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+              android:paddingLeft="16dp"
+    >
+
+    <TextView
+        android:id="@+id/layout_info_row_header_value"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center_vertical"
+        android:text="Devices"
+        android:textColor="@color/teel"
+        android:textSize="14sp"
+        />
+
+</LinearLayout>

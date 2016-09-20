@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:paddingTop="4dp"
+        >
+
+        <View
+            android:id="@+id/layout_info_row_separator_top"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentTop="true"
+            android:background="@color/divider"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/layout_info_row_content_key"
+            android:layout_width="128dp"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="Provision Id"
+            android:textColor="@color/primary_light"
+            android:textSize="13sp"
+            />
+
+        <TextView
+            android:id="@+id/layout_info_row_content_value"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/layout_info_row_content_key"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:maxLines="1"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:text="ab101890598ca"
+            android:textSize="13sp"
+            />
+
+        <View
+            android:id="@+id/layout_info_row_separator_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/divider"
+            android:visibility="invisible"
+            />
+
+    </RelativeLayout>
+</LinearLayout>

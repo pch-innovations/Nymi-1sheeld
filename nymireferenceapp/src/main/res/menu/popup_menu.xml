@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/popup_menu_notify_positive"
+        android:title="notify positive"/>
+
+    <item
+        android:id="@+id/popup_menu_notify_negative"
+        android:title="notify negative"/>
+
+    <item
+        android:id="@+id/popup_menu_get_random"
+        android:title="get random"/>
+
+    <item
+        android:id="@+id/popup_menu_sign"
+        android:title="sign"/>
+
+    <item
+        android:id="@+id/popup_menu_pair_with_partner"
+        android:title="add partner"/>
+
+    <item
+        android:id="@+id/popup_menu_get_symmetric_key"
+        android:title="get symmetric key"/>
+
+    <item
+        android:id="@+id/popup_menu_set_totp_key"
+        android:title="set totp key"/>
+
+    <item
+        android:id="@+id/popup_menu_get_totp"
+        android:title="get totp"/>
+
+    <item
+        android:id="@+id/popup_menu_device_info"
+        android:title="device info"/>
+
+</menu>

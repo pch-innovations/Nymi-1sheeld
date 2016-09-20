@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:gravity="center_vertical"
+              android:orientation="horizontal"
+    >
+
+    <FrameLayout
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        >
+
+        <ImageView
+            android:id="@+id/layout_provision_row_img_device"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/img_device"
+            android:visibility="invisible"
+            />
+
+        <ImageView
+            android:id="@+id/layout_provision_row_img_device_maybe"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/img_device_maybe"
+            android:visibility="invisible"
+            />
+
+        <ImageView
+            android:id="@+id/layout_provision_row_img_device_unclasped"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@mipmap/img_device_unclasped"
+            android:visibility="invisible"
+            />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/layout_provision_row_provision"
+        android:layout_width="256dp"
+        android:layout_height="48dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="center_vertical"
+        android:text="ab101890598ca"
+        />
+
+</LinearLayout>

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Nymi Terminal Example</string>
+    <string name="activity_terminal_unauthorized">Unauthorized user</string>
+    <string name="no_band_found">No authorized band found</string>
+    <string name="partner_already_verified">Partner already verified</string>
+    <string name="roaming_authentication_verified">roaming authentication verified</string>
+</resources>

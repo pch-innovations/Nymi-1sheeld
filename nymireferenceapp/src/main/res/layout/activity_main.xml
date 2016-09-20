@@ -1,0 +1,165 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context=".MainActivity"
+    >
+
+    <TextView
+        android:id="@+id/layout_main_discovery_label"
+        android:layout_width="96dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:fontFamily="sans-serif"
+        android:text="Discovery"
+        android:textColor="@color/primary_light"
+        android:textSize="13sp"
+        />
+
+    <Switch
+        android:id="@+id/layout_main_discovery_switch"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:checked="true"
+        android:enabled="false"
+        />
+
+    <View
+        android:id="@+id/layout_main_divider_1"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_below="@id/layout_main_discovery_label"
+        android:layout_marginTop="8dp"
+        android:background="@color/divider"
+        />
+
+    <TextView
+        android:id="@+id/layout_main_agreement_label"
+        android:layout_width="96dp"
+        android:layout_height="24dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/layout_main_divider_1"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif"
+        android:text="Agreement"
+        android:textColor="@color/primary_light"
+        />
+
+    <LinearLayout
+        android:id="@+id/layout_main_led_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_main_agreement_label"
+        android:orientation="horizontal"
+        >
+
+        <RadioButton
+            android:id="@+id/layout_main_led0"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:enabled="false"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/layout_main_led1"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:enabled="false"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/layout_main_led2"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:enabled="false"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/layout_main_led3"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:enabled="false"
+            android:gravity="center"
+            />
+
+        <RadioButton
+            android:id="@+id/layout_main_led4"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:enabled="false"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/layout_main_button_accept"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:enabled="false"
+            android:text="Accept"
+            android:textSize="12sp"
+            />
+
+        <Button
+            android:id="@+id/layout_main_button_reject"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="96dp"
+            android:layout_height="48dp"
+            android:enabled="false"
+            android:text="Reject"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/layout_main_divider_2"
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:layout_below="@id/layout_main_led_panel"
+        android:layout_marginTop="8dp"
+        android:background="@color/divider"
+        />
+
+    <TextView
+        android:id="@+id/layout_main_provisions_label"
+        android:layout_width="96dp"
+        android:layout_height="24dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/layout_main_divider_2"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif"
+        android:text="Provisions"
+        android:textColor="@color/primary_light"
+        />
+
+    <ListView
+        android:id="@+id/layout_main_provision_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_main_provisions_label"
+        >
+    </ListView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Unlock door"
+        android:id="@+id/btnSendToOneSheeld"
+        android:layout_alignParentBottom="false"
+        android:layout_toEndOf="@+id/layout_main_provisions_label"
+        android:layout_below="@+id/layout_main_provision_list" />
+
+
+</RelativeLayout>
