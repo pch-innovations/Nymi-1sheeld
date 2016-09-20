@@ -625,13 +625,13 @@ public class MainActivity extends Activity {
                                                   NymiDeviceInfo.FoundStatus after,
                                                   boolean partnerVerified
                                                   ) {
-                /// if mAdapterProvisions.
+                /// insert code here
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +
                         " partnerVerified=" + partnerVerified);
             }
-        }); 
+        });
 
         mNymiAdapter.setDevicePresenceChangeCallback(new NymiAdapter.DevicePresenceChangeCallback() {
             @Override
