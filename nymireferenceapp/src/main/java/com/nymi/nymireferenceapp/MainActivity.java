@@ -92,6 +92,7 @@ public class MainActivity extends Activity {
 
     private byte pushButtonShieldId = OneSheeldSdk.getKnownShields().PUSH_BUTTON_SHIELD.getId();
     private byte pushButtonFunctionId = (byte) 0x01;
+    private byte keyPadShieldid = OneSheeldSdk.getKnownShields().KEYPAD_SHIELD.getId();
 
 
     @Override
@@ -128,6 +129,10 @@ public class MainActivity extends Activity {
                 sf.addArgument(pin13value);
                 pin13value = !pin13value;
                 oneSheeldDevice.sendShieldFrame(sf);
+
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid);
+                kp.addArgument(2);
+                oneSheeldDevice.sendShieldFrame(kp);
             }
         });
 
