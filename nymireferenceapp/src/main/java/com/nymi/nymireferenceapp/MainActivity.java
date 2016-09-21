@@ -40,6 +40,7 @@ import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.gson.Gson;
 import com.nymi.api.NymiAdapter;
@@ -91,8 +92,9 @@ public class MainActivity extends Activity {
     private boolean pin13value = true;
 
     private byte pushButtonShieldId = OneSheeldSdk.getKnownShields().PUSH_BUTTON_SHIELD.getId();
-    private byte pushButtonFunctionId = (byte) 0x01;
+    private byte pushButtonFunctionId = (byte) 0x04;
     private byte keyPadShieldid = OneSheeldSdk.getKnownShields().KEYPAD_SHIELD.getId();
+    private byte keyPadFunctionId = (byte) 0x01;
 
 
     @Override
@@ -130,8 +132,28 @@ public class MainActivity extends Activity {
                 pin13value = !pin13value;
                 oneSheeldDevice.sendShieldFrame(sf);
 
-                ShieldFrame kp = new ShieldFrame(keyPadShieldid);
-                kp.addArgument(2);
+
+
+
+            }
+        });
+
+        //toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        //    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+        ToggleButton btnkeypadtry = (ToggleButton) findViewById(R.id.btnkeypadtry);
+        btnkeypadtry.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid,keyPadFunctionId);
+                if(isChecked) {
+                    kp.addArgument(3,11);
+                }
+                else kp.addArgument((byte) 0x03, 0x00);
+                //kp.addArgument((String) "abc" );
+                //kp.addArgument(pin13value);
+                pin13value = !pin13value;
                 oneSheeldDevice.sendShieldFrame(kp);
             }
         });
