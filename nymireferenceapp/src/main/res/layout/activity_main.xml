@@ -155,7 +155,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Unlock door"
+        android:text="PUSH BUTTON"
         android:id="@+id/btnSendToOneSheeld"
         android:layout_alignParentBottom="false"
         android:layout_toEndOf="@+id/layout_main_provisions_label"
@@ -168,6 +168,14 @@
         android:id="@+id/nymiFoundStatusAutheticated"
         android:layout_alignTop="@+id/layout_main_provision_list"
         android:layout_alignEnd="@+id/layout_main_provision_list" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KEY PAD"
+        android:id="@+id/btnkeypadtry"
+        android:layout_below="@+id/btnSendToOneSheeld"
+        android:layout_toEndOf="@+id/btnSendToOneSheeld" />
 
 
 </RelativeLayout>

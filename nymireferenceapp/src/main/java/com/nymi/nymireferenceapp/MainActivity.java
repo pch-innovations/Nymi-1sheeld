@@ -122,14 +122,17 @@ public class MainActivity extends Activity {
         btnSendToOneSheeld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // oneSheeldDevice.digitalWrite(13, pin13value);
-               //
-
+                // oneSheeldDevice.digitalWrite(13, pin13value);
+                //
                 ShieldFrame sf = new ShieldFrame(pushButtonShieldId, pushButtonFunctionId);
                 sf.addArgument(pin13value);
                 pin13value = !pin13value;
                 oneSheeldDevice.sendShieldFrame(sf);
+            }
+        });
 
+        Button btnkeypadtry = (button) findViewById(R.id.btnkeypadtry);
+        btnkeypadtry.setOnClickListener(new View.OnClickListener()) {
                 ShieldFrame kp = new ShieldFrame(keyPadShieldid);
                 kp.addArgument(2);
                 oneSheeldDevice.sendShieldFrame(kp);
