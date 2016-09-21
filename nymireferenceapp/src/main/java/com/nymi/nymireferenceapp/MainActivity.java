@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
 
                 ShieldFrame kp = new ShieldFrame(keyPadShieldid,keyPadFunctionId);
                 if(isChecked) {
-                    kp.addArgument(3,11);
+                    kp.addArgument(0x03,100);
                 }
                 else kp.addArgument((byte) 0x03, 0x00);
                 //kp.addArgument((String) "abc" );
@@ -221,6 +221,18 @@ public class MainActivity extends Activity {
                     MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
         } else {
             hasBluetoothPermission = true;
+        }
+
+
+        if (hasBluetoothPermission) {
+            oneSheeldManager.scan();
+        } else {
+            uiThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this, "Error: Permission not granted", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         // -------------------- Nymi setup -------------------------
