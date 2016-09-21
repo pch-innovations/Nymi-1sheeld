@@ -92,7 +92,7 @@ public class MainActivity extends Activity {
     private boolean pin13value = true;
 
     private byte pushButtonShieldId = OneSheeldSdk.getKnownShields().PUSH_BUTTON_SHIELD.getId();
-    private byte pushButtonFunctionId = (byte) 0x04;
+    private byte pushButtonFunctionId = (byte) 0x01;
     private byte keyPadShieldid = OneSheeldSdk.getKnownShields().KEYPAD_SHIELD.getId();
     private byte keyPadFunctionId = (byte) 0x01;
 
@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
 
                 ShieldFrame kp = new ShieldFrame(keyPadShieldid,keyPadFunctionId);
                 if(isChecked) {
-                    kp.addArgument(0x03,100);
+                    kp.addArgument(0x03,0xff);
                 }
                 else kp.addArgument((byte) 0x03, 0x00);
                 //kp.addArgument((String) "abc" );
