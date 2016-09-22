@@ -63,6 +63,7 @@ import java.util.BitSet;
 
 import com.integreight.onesheeld.sdk.*;
 
+
 public class MainActivity extends Activity {
 
     private final String LOG_TAG = getClass().getSimpleName();
@@ -120,19 +121,19 @@ public class MainActivity extends Activity {
 
         // -------------------- 1Sheeld setup ------------------------
 
+
+
         Button btnSendToOneSheeld = (Button) findViewById(R.id.btnSendToOneSheeld);
         btnSendToOneSheeld.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // oneSheeldDevice.digitalWrite(13, pin13value);
-               //
+                // oneSheeldDevice.digitalWrite(13, pin13value);
+                //
 
                 ShieldFrame sf = new ShieldFrame(pushButtonShieldId, pushButtonFunctionId);
                 sf.addArgument(pin13value);
                 pin13value = !pin13value;
                 oneSheeldDevice.sendShieldFrame(sf);
-
-
 
 
             }
@@ -146,14 +147,40 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
-                ShieldFrame kp = new ShieldFrame(keyPadShieldid,keyPadFunctionId);
-                if(isChecked) {
-                    kp.addArgument(0x03,0xff);
+                byte rowByte = 0, columnByte = 0;
+                int row =1;
+                int column =1;
+
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+                if (isChecked) {
+
+                    rowByte = BitsUtils.setBit(rowByte, row);
+                    columnByte = BitsUtils.setBit(columnByte,column);
+                    kp.addArgument(rowByte);
+                    kp.addArgument(columnByte);
+                } else {
+                    rowByte = BitsUtils.resetBit(rowByte, row);
+                    columnByte = BitsUtils.resetBit(columnByte,column);
+                    kp.addArgument(rowByte);
+                    kp.addArgument(columnByte);
                 }
-                else kp.addArgument((byte) 0x03, 0x00);
-                //kp.addArgument((String) "abc" );
-                //kp.addArgument(pin13value);
-                pin13value = !pin13value;
+                oneSheeldDevice.sendShieldFrame(kp);
+            }
+        });
+
+        ToggleButton btnkeypadtry2 = (ToggleButton) findViewById(R.id.btnkeypadtry2);
+        btnkeypadtry2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+                if (isChecked) {
+                    kp.addArgument(0x01, 0x02);
+                    kp.addArgument(0x01, 0x01);
+                } else {
+                    kp.addArgument(0x00);
+                    kp.addArgument(0x00);
+                }
                 oneSheeldDevice.sendShieldFrame(kp);
             }
         });
@@ -497,12 +524,9 @@ public class MainActivity extends Activity {
                                     public void onTotpGet(int status, String totp) {
                                         if (status == TOTP_GET_SUCCESS) {
                                             Toast.makeText(MainActivity.this, "Got TOTP: " + totp, Toast.LENGTH_SHORT).show();
-                                        }
-                                        else if (status == TOTP_GET_REFUSED) {
+                                        } else if (status == TOTP_GET_REFUSED) {
                                             Toast.makeText(MainActivity.this, "Get TOTP failed. Have you set TOTP key?", Toast.LENGTH_LONG).show();
-                                        }
-
-                                        else {
+                                        } else {
                                             Toast.makeText(MainActivity.this, "Get TOTP failed", Toast.LENGTH_LONG).show();
                                         }
                                     }
@@ -640,8 +664,8 @@ public class MainActivity extends Activity {
             public void onDeviceDetected(String pid,
                                          String nymibandNonce,
                                          boolean partnerVerified,
-                                         boolean connectable, 
-                                         int RSSI_last, 
+                                         boolean connectable,
+                                         int RSSI_last,
                                          int RSSI_smoothed) {
                 Log.d(LOG_TAG, "onDeviceDetected pid=" + pid +
                         " nonce=" + nymibandNonce +
@@ -653,11 +677,11 @@ public class MainActivity extends Activity {
 
         mNymiAdapter.setDeviceFoundCallback(new NymiAdapter.DeviceFoundCallback() {
             @Override
-            public void onDeviceFound(String pid, 
-                                      String nymibandNonce, 
-                                      boolean connectable, 
-                                      int RSSI_last, 
-                                      int RSSI_smoothed, 
+            public void onDeviceFound(String pid,
+                                      String nymibandNonce,
+                                      boolean connectable,
+                                      int RSSI_last,
+                                      int RSSI_smoothed,
                                       boolean strong) {
                 Log.d(LOG_TAG, "onDeviceFound pid=" + pid +
                         " nonce=" + nymibandNonce +
@@ -674,13 +698,12 @@ public class MainActivity extends Activity {
                                                   NymiDeviceInfo.FoundStatus before,
                                                   NymiDeviceInfo.FoundStatus after,
                                                   boolean partnerVerified
-                                                  ) {
+            ) {
                 /// insert code here
-                if(after==NymiDeviceInfo.FoundStatus.AUTHENTICATED)  {
+                if (after == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
                     NymiAuthenticated.setEnabled(true);
                     NymiAuthenticated.setChecked(true);
-                }
-                else {
+                } else {
                     NymiAuthenticated.setEnabled(false);
                     NymiAuthenticated.setChecked(false);
                 }
@@ -778,7 +801,7 @@ public class MainActivity extends Activity {
 
     private View inflateNymiInfo(NymiInfo nymiInfo) {
         View root = getLayoutInflater().inflate(R.layout.layout_dialog, null);
-        LinearLayout container = (LinearLayout)root.findViewById(R.id.layout_dialog_main_container);
+        LinearLayout container = (LinearLayout) root.findViewById(R.id.layout_dialog_main_container);
 
         addInfoHeader(container, "Devices");
         for (NymiDeviceInfo nymiDeviceInfo : nymiInfo.getDevicesInfo()) {
@@ -801,7 +824,7 @@ public class MainActivity extends Activity {
 
     private View inflateNymiDeviceInfo(NymiDeviceInfo info) {
         View root = getLayoutInflater().inflate(R.layout.layout_dialog, null);
-        LinearLayout container = (LinearLayout)root.findViewById(R.id.layout_dialog_main_container);
+        LinearLayout container = (LinearLayout) root.findViewById(R.id.layout_dialog_main_container);
 
         addNymiDeviceInfo(container, info);
 
@@ -817,22 +840,22 @@ public class MainActivity extends Activity {
 
     private void addInfoHeader(LinearLayout root, String header) {
         View row = getLayoutInflater().inflate(R.layout.layout_info_row_header, null);
-        ((TextView)row.findViewById(R.id.layout_info_row_header_value)).setText(header);
+        ((TextView) row.findViewById(R.id.layout_info_row_header_value)).setText(header);
         root.addView(row);
     }
 
     private void addNymiProvisionInfo(LinearLayout root, String provision, ArrayList<String> provisionsPresent) {
         View row = getLayoutInflater().inflate(R.layout.layout_info_row_content, null);
-        ((TextView)row.findViewById(R.id.layout_info_row_content_key)).setText(provision);
+        ((TextView) row.findViewById(R.id.layout_info_row_content_key)).setText(provision);
         boolean isPresent = provisionsPresent != null && provisionsPresent.contains(provision);
-        ((TextView)row.findViewById(R.id.layout_info_row_content_value)).setText(isPresent ? "present" : "-");
+        ((TextView) row.findViewById(R.id.layout_info_row_content_value)).setText(isPresent ? "present" : "-");
         root.addView(row);
     }
 
     private void addInfoRow(LinearLayout root, String key, String value, boolean showSeparatorTop, boolean showSeparatorBottom) {
         View row = getLayoutInflater().inflate(R.layout.layout_info_row_content, null);
-        ((TextView)row.findViewById(R.id.layout_info_row_content_key)).setText(key);
-        ((TextView)row.findViewById(R.id.layout_info_row_content_value)).setText(value);
+        ((TextView) row.findViewById(R.id.layout_info_row_content_key)).setText(key);
+        ((TextView) row.findViewById(R.id.layout_info_row_content_value)).setText(value);
         row.findViewById(R.id.layout_info_row_separator_top).setVisibility(showSeparatorTop ? View.VISIBLE : View.INVISIBLE);
         row.findViewById(R.id.layout_info_row_separator_bottom).setVisibility(showSeparatorBottom ? View.VISIBLE : View.INVISIBLE);
         root.addView(row);
@@ -855,8 +878,7 @@ public class MainActivity extends Activity {
             addInfoRow(root, "Auth.Remaining", String.valueOf(info.getAuthenticationWindowRemaining()), false, false);
             addInfoRow(root, "Commands Queued", String.valueOf(info.getCommandsQueued()), false, false);
             addInfoRow(root, "Has Totp", String.valueOf(info.hasTotp()), false, true);
-        }
-        else {
+        } else {
             addInfoRow(root, "Smoothed RSSI", String.valueOf(info.getRSSI_smoothed()), false, true);
         }
     }
@@ -864,4 +886,20 @@ public class MainActivity extends Activity {
     private class GServerSignupResponse {
         public String Ok;
     }
+
+
+
+   private static class BitsUtils {
+
+       public static byte setBit(byte b, int bit) {
+           if (bit < 0 || bit >= 8) return b;
+           return (byte) (b | (1 << bit));
+       }
+
+       public static byte resetBit(byte b, int bit) {
+           if (bit < 0 || bit >= 8) return b;
+           return (byte) (b & (~(1 << bit)));
+       }
+
+   }
 }

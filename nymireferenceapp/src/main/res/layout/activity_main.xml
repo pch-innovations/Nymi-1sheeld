@@ -174,6 +174,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="KEY"
+        android:id="@+id/btnkeypadtry2"
+        android:layout_alignParentBottom="false"
+        android:layout_alignTop="@+id/btnkeypadtry"
+        android:layout_toRightOf="@+id/btnkeypadtry"
+        android:buttonTint="#fc9b1c"
+        android:clickable="true" />
+
+    <ToggleButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KEY"
         android:id="@+id/btnkeypadtry"
         android:layout_alignParentBottom="false"
         android:layout_alignTop="@+id/btnSendToOneSheeld"
