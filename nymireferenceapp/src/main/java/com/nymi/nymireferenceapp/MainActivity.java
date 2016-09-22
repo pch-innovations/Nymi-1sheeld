@@ -83,7 +83,7 @@ public class MainActivity extends Activity {
     private Button mButtonReject;
 
     private static final String TOTP_SAMPLE_KEY = "48656c6c6f21deadbeef";
-    private static final String NEA_NAME = "NymiExample";
+    private static final String NEA_NAME = "NymiDoorControl";
 
     private Handler uiThreadHandler = new Handler();
     private final static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1234;
@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
                 byte rowByte = 0, columnByte = 0;
-                int row =1;
+                int row =0;
                 int column =1;
 
                 ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
@@ -173,13 +173,22 @@ public class MainActivity extends Activity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                byte rowByte = 0, columnByte = 0;
+                int row =1;
+                int column =0;
+
                 ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
                 if (isChecked) {
-                    kp.addArgument(0x01, 0x02);
-                    kp.addArgument(0x01, 0x01);
+
+                    rowByte = BitsUtils.setBit(rowByte, row);
+                    columnByte = BitsUtils.setBit(columnByte,column);
+                    kp.addArgument(rowByte);
+                    kp.addArgument(columnByte);
                 } else {
-                    kp.addArgument(0x00);
-                    kp.addArgument(0x00);
+                    rowByte = BitsUtils.resetBit(rowByte, row);
+                    columnByte = BitsUtils.resetBit(columnByte,column);
+                    kp.addArgument(rowByte);
+                    kp.addArgument(columnByte);
                 }
                 oneSheeldDevice.sendShieldFrame(kp);
             }
@@ -700,13 +709,46 @@ public class MainActivity extends Activity {
                                                   boolean partnerVerified
             ) {
                 /// insert code here
+                /*
                 if (after == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
                     NymiAuthenticated.setEnabled(true);
                     NymiAuthenticated.setChecked(true);
+
+                    byte rowByte = 0, columnByte = 0;
+                    int column =0;
+                    for(int row =0; row<2;row++) {
+
+                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                            rowByte = BitsUtils.setBit(rowByte, row);
+                            columnByte = BitsUtils.setBit(columnByte, column);
+                            kp.addArgument(rowByte);
+                            kp.addArgument(columnByte);
+
+                        oneSheeldDevice.sendShieldFrame(kp);
+                    }
+
                 } else {
+
+                    byte rowByte = 0, columnByte = 0;
+                    int column =0;
+                    for(int row =0; row<2;row++) {
+
+                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                        rowByte = BitsUtils.resetBit(rowByte, row);
+                        columnByte = BitsUtils.resetBit(columnByte, column);
+                        kp.addArgument(rowByte);
+                        kp.addArgument(columnByte);
+
+                        oneSheeldDevice.sendShieldFrame(kp);
+                    }
+
                     NymiAuthenticated.setEnabled(false);
                     NymiAuthenticated.setChecked(false);
                 }
+*/
+
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +
@@ -714,18 +756,79 @@ public class MainActivity extends Activity {
             }
         });
 
+       // public static NymiDeviceInfo.FoundStatus valueOf (String name)
+
         mNymiAdapter.setDevicePresenceChangeCallback(new NymiAdapter.DevicePresenceChangeCallback() {
             @Override
             public void onDevicePresenceChange(String pid,
                                                NymiDeviceInfo.PresenceState before,
                                                NymiDeviceInfo.PresenceState after,
                                                boolean partnerVerified) {
+
                 mAdapterProvisions.updateProvisionPresenceState(pid, after);
+
+                if (after == NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_YES) {
+
+/*
+                private void addNymiDeviceInfo(NymiDeviceInfo info) {
+
+                    private NymiDeviceInfo.FoundStatus mFoundStatus;
+
+
+                public NymiDeviceInfo.FoundStatus getFoundStatus () {
+                    return this.mFoundStatus;
+                }
+
+                public String.valueOf(NymiDeviceInfo.getFoundStatus())
+
+
+                public static NymiDeviceInfo.FoundStatus valueOf (String mNymiAdapter)
+                if (valueOf == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
+*/
+                    NymiAuthenticated.setEnabled(true);
+                    NymiAuthenticated.setChecked(true);
+
+                    byte rowByte = 0, columnByte = 0;
+                    int column = 0;
+                    for (int row = 0; row < 2; row++) {
+
+                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                        rowByte = BitsUtils.setBit(rowByte, row);
+                        columnByte = BitsUtils.setBit(columnByte, column);
+                        kp.addArgument(rowByte);
+                        kp.addArgument(columnByte);
+
+                        oneSheeldDevice.sendShieldFrame(kp);
+                    }
+
+                } else {
+
+                    byte rowByte = 0, columnByte = 0;
+                    int column = 0;
+                    for (int row = 0; row < 2; row++) {
+
+                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                        rowByte = BitsUtils.resetBit(rowByte, row);
+                        columnByte = BitsUtils.resetBit(columnByte, column);
+                        kp.addArgument(rowByte);
+                        kp.addArgument(columnByte);
+
+                        oneSheeldDevice.sendShieldFrame(kp);
+                    }
+
+                    NymiAuthenticated.setEnabled(false);
+                    NymiAuthenticated.setChecked(false);
+                }
+
                 Log.d(LOG_TAG, "onDevicePresenceChange pid=" + pid +
                         " before=" + before +
                         " after=" + after +
                         " partnerVerified=" + partnerVerified);
-            }
+                }
+
+
         });
 
         mNymiAdapter.setProximityEstimateChangeCallback(new NymiAdapter.ProximityEstimateChangeCallback() {
