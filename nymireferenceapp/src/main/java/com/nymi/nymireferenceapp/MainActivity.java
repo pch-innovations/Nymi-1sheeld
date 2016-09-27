@@ -764,8 +764,7 @@ public class MainActivity extends Activity {
                         " partnerVerified=" + partnerVerified);
             }
         });
-
-       // public static NymiDeviceInfo.FoundStatus valueOf (String name)
+        
 
         mNymiAdapter.setDevicePresenceChangeCallback(new NymiAdapter.DevicePresenceChangeCallback() {
             @Override
@@ -778,63 +777,25 @@ public class MainActivity extends Activity {
 
                 if (after == NymiDeviceInfo.PresenceState.DEVICE_PRESENCE_YES) {
 
-/*
-                private void addNymiDeviceInfo(NymiDeviceInfo info) {
-
-                    private NymiDeviceInfo.FoundStatus mFoundStatus;
-
-
-                public NymiDeviceInfo.FoundStatus getFoundStatus () {
-                    return this.mFoundStatus;
-                }
-
-                public String.valueOf(NymiDeviceInfo.getFoundStatus())
-
-
-                public static NymiDeviceInfo.FoundStatus valueOf (String mNymiAdapter)
-                */
 
                     mNymiAdapter.getInfo(new NymiAdapter.InfoCallback() {
                         @Override
                         public void onInfo(int status, NymiInfo info) {
                             if (status == INFO_SUCCESS) {
                                 for (NymiDeviceInfo nymiDeviceInfo : info.getDevicesInfo()) {
-                                    if (nymiDeviceInfo.getPid().equals(pid) &&
+                                    if (pid != null && nymiDeviceInfo.getPid().equals(pid) &&
                                             nymiDeviceInfo.getFoundStatus() == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
 
                                         Log.d(LOG_TAG, "onDevicePresenceChange: Present and authenticated");
                                         NymiAuthenticated.setEnabled(true);
                                         NymiAuthenticated.setChecked(true);
 
-                                        byte rowByte = 0, columnByte = 0;
-                                        int column = 0;
-                                        for (int row = 0; row < 2; row++) {
-
-                                            ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-
-                                            rowByte = BitsUtils.setBit(rowByte, row);
-                                            columnByte = BitsUtils.setBit(columnByte, column);
-                                            kp.addArgument(rowByte);
-                                            kp.addArgument(columnByte);
-
-                                            oneSheeldDevice.sendShieldFrame(kp);
-                                        }
+                                        openDoorGreenLED();
 
                                     } else {
 
                                         Log.d(LOG_TAG, "onDevicePresenceChange: Present but NOT authenticated");
-                                        byte rowByte = 0, columnByte = 0;
-                                        int column = 1;
-                                        int row = 0;
-
-                                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-
-                                        rowByte = BitsUtils.setBit(rowByte, row);
-                                        columnByte = BitsUtils.setBit(columnByte, column);
-                                        kp.addArgument(rowByte);
-                                        kp.addArgument(columnByte);
-
-                                        oneSheeldDevice.sendShieldFrame(kp);
+                                       yellowLEDON();
                                     }
 
                                 }
@@ -852,19 +813,8 @@ public class MainActivity extends Activity {
                 }
                 else {
                     Log.d(LOG_TAG, "onDevicePresenceChange: Device no longer present");
-                    byte rowByte = 0, columnByte = 0;
-                    int column = 0;
-                    for (int row = 0; row < 2; row++) {
 
-                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-
-                        rowByte = BitsUtils.resetBit(rowByte, row);
-                        columnByte = BitsUtils.resetBit(columnByte, column);
-                        kp.addArgument(rowByte);
-                        kp.addArgument(columnByte);
-
-                        oneSheeldDevice.sendShieldFrame(kp);
-                    }
+                    closeDoorGreenLED();
 
                     NymiAuthenticated.setEnabled(false);
                     NymiAuthenticated.setChecked(false);
@@ -1033,6 +983,71 @@ public class MainActivity extends Activity {
         public String Ok;
     }
 
+    private void openDoorGreenLED () {
+        byte rowByte = 0, columnByte = 0;
+        int column = 0;
+        for (int row = 0; row < 2; row++) {
+
+            ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+            rowByte = BitsUtils.setBit(rowByte, row);
+            columnByte = BitsUtils.setBit(columnByte, column);
+            kp.addArgument(rowByte);
+            kp.addArgument(columnByte);
+            if(oneSheeldDevice != null) {
+                oneSheeldDevice.sendShieldFrame(kp);
+            }
+        }
+    }
+
+    private void closeDoorGreenLED () {
+        byte rowByte = 0, columnByte = 0;
+        int column = 0;
+        for (int row = 0; row < 2; row++) {
+
+            ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+            rowByte = BitsUtils.resetBit(rowByte, row);
+            columnByte = BitsUtils.resetBit(columnByte, column);
+            kp.addArgument(rowByte);
+            kp.addArgument(columnByte);
+            if(oneSheeldDevice != null) {
+                oneSheeldDevice.sendShieldFrame(kp);
+            }
+        }
+    }
+
+    private void yellowLEDON () {
+        byte rowByte = 0, columnByte = 0;
+        int column = 1;
+        int row = 0;
+
+        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+        rowByte = BitsUtils.setBit(rowByte, row);
+        columnByte = BitsUtils.setBit(columnByte, column);
+        kp.addArgument(rowByte);
+        kp.addArgument(columnByte);
+        if(oneSheeldDevice != null) {
+            oneSheeldDevice.sendShieldFrame(kp);
+        }
+    }
+
+    private void yellowLEDOFF () {
+        byte rowByte = 0, columnByte = 0;
+        int column = 1;
+        int row = 0;
+
+        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+        rowByte = BitsUtils.resetBit(rowByte, row);
+        columnByte = BitsUtils.resetBit(columnByte, column);
+        kp.addArgument(rowByte);
+        kp.addArgument(columnByte);
+        if(oneSheeldDevice != null) {
+            oneSheeldDevice.sendShieldFrame(kp);
+        }
+    }
 
 
    private static class BitsUtils {
