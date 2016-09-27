@@ -281,7 +281,6 @@ public class MainActivity extends Activity {
         }
 
         // -------------------- Nymi setup -------------------------
-
         mAdapterProvisions = new AdapterProvisions(this);
 
         /** Step 1 - Get instance of the Nymi Adapter*/
@@ -718,45 +717,14 @@ public class MainActivity extends Activity {
                                                   boolean partnerVerified
             ) {
                 /// insert code here
-                /*
+
                 if (after == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
-                    NymiAuthenticated.setEnabled(true);
-                    NymiAuthenticated.setChecked(true);
-
-                    byte rowByte = 0, columnByte = 0;
-                    int column =0;
-                    for(int row =0; row<2;row++) {
-
-                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-
-                            rowByte = BitsUtils.setBit(rowByte, row);
-                            columnByte = BitsUtils.setBit(columnByte, column);
-                            kp.addArgument(rowByte);
-                            kp.addArgument(columnByte);
-
-                        oneSheeldDevice.sendShieldFrame(kp);
-                    }
-
-                } else {
-
-                    byte rowByte = 0, columnByte = 0;
-                    int column =0;
-                    for(int row =0; row<2;row++) {
-
-                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-
-                        rowByte = BitsUtils.resetBit(rowByte, row);
-                        columnByte = BitsUtils.resetBit(columnByte, column);
-                        kp.addArgument(rowByte);
-                        kp.addArgument(columnByte);
-
-                        oneSheeldDevice.sendShieldFrame(kp);
-                    }
-
-                    NymiAuthenticated.setEnabled(false);
-                    NymiAuthenticated.setChecked(false);
+                    openDoorGreenLED();
                 }
-*/
+               else {
+                    closeDoorGreenLED();
+                }
+
 
                 Log.d(LOG_TAG, "onDeviceFoundStatusChange pid=" + pid +
                         " before=" + before +
@@ -764,7 +732,7 @@ public class MainActivity extends Activity {
                         " partnerVerified=" + partnerVerified);
             }
         });
-        
+
 
         mNymiAdapter.setDevicePresenceChangeCallback(new NymiAdapter.DevicePresenceChangeCallback() {
             @Override
@@ -815,6 +783,7 @@ public class MainActivity extends Activity {
                     Log.d(LOG_TAG, "onDevicePresenceChange: Device no longer present");
 
                     closeDoorGreenLED();
+                    yellowLEDOFF();
 
                     NymiAuthenticated.setEnabled(false);
                     NymiAuthenticated.setChecked(false);
