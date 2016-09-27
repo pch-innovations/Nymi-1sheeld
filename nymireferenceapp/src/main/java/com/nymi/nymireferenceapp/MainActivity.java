@@ -27,6 +27,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.util.Log;
@@ -123,24 +124,32 @@ public class MainActivity extends Activity {
 
 
 
-        Button btnSendToOneSheeld = (Button) findViewById(R.id.btnSendToOneSheeld);
-        btnSendToOneSheeld.setOnClickListener(new View.OnClickListener() {
+        final Button btnSendToOneSheeld = (Button) findViewById(R.id.btnSendToOneSheeld);
+        btnSendToOneSheeld.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View view) {
-                // oneSheeldDevice.digitalWrite(13, pin13value);
-                //
+            public boolean onTouch(View v, MotionEvent event) {
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+                byte rowByte = 0, columnByte = 0;
+                int row =0;
+                int column =2;
 
-                ShieldFrame sf = new ShieldFrame(pushButtonShieldId, pushButtonFunctionId);
-                sf.addArgument(pin13value);
-                pin13value = !pin13value;
-                oneSheeldDevice.sendShieldFrame(sf);
+                    rowByte = BitsUtils.setBit(rowByte, row);
+                    columnByte = BitsUtils.setBit(columnByte,column);
+                    kp.addArgument(rowByte);
+                    kp.addArgument(columnByte);
+                oneSheeldDevice.sendShieldFrame(kp);
 
+                return false;
 
             }
         });
 
-        //toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-        //    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+
+
+
+
+   // };
 
         ToggleButton btnkeypadtry = (ToggleButton) findViewById(R.id.btnkeypadtry);
         btnkeypadtry.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -760,7 +769,7 @@ public class MainActivity extends Activity {
 
         mNymiAdapter.setDevicePresenceChangeCallback(new NymiAdapter.DevicePresenceChangeCallback() {
             @Override
-            public void onDevicePresenceChange(String pid,
+            public void onDevicePresenceChange(final String pid,
                                                NymiDeviceInfo.PresenceState before,
                                                NymiDeviceInfo.PresenceState after,
                                                boolean partnerVerified) {
@@ -783,27 +792,66 @@ public class MainActivity extends Activity {
 
 
                 public static NymiDeviceInfo.FoundStatus valueOf (String mNymiAdapter)
-                if (valueOf == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
-*/
-                    NymiAuthenticated.setEnabled(true);
-                    NymiAuthenticated.setChecked(true);
+                */
 
-                    byte rowByte = 0, columnByte = 0;
-                    int column = 0;
-                    for (int row = 0; row < 2; row++) {
+                    mNymiAdapter.getInfo(new NymiAdapter.InfoCallback() {
+                        @Override
+                        public void onInfo(int status, NymiInfo info) {
+                            if (status == INFO_SUCCESS) {
+                                for (NymiDeviceInfo nymiDeviceInfo : info.getDevicesInfo()) {
+                                    if (nymiDeviceInfo.getPid().equals(pid) &&
+                                            nymiDeviceInfo.getFoundStatus() == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
 
-                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+                                        Log.d(LOG_TAG, "onDevicePresenceChange: Present and authenticated");
+                                        NymiAuthenticated.setEnabled(true);
+                                        NymiAuthenticated.setChecked(true);
 
-                        rowByte = BitsUtils.setBit(rowByte, row);
-                        columnByte = BitsUtils.setBit(columnByte, column);
-                        kp.addArgument(rowByte);
-                        kp.addArgument(columnByte);
+                                        byte rowByte = 0, columnByte = 0;
+                                        int column = 0;
+                                        for (int row = 0; row < 2; row++) {
 
-                        oneSheeldDevice.sendShieldFrame(kp);
-                    }
+                                            ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
 
-                } else {
+                                            rowByte = BitsUtils.setBit(rowByte, row);
+                                            columnByte = BitsUtils.setBit(columnByte, column);
+                                            kp.addArgument(rowByte);
+                                            kp.addArgument(columnByte);
 
+                                            oneSheeldDevice.sendShieldFrame(kp);
+                                        }
+
+                                    } else {
+
+                                        Log.d(LOG_TAG, "onDevicePresenceChange: Present but NOT authenticated");
+                                        byte rowByte = 0, columnByte = 0;
+                                        int column = 1;
+                                        int row = 0;
+
+                                        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                                        rowByte = BitsUtils.setBit(rowByte, row);
+                                        columnByte = BitsUtils.setBit(columnByte, column);
+                                        kp.addArgument(rowByte);
+                                        kp.addArgument(columnByte);
+
+                                        oneSheeldDevice.sendShieldFrame(kp);
+                                    }
+
+                                }
+                            } else {
+                                Log.d(LOG_TAG, "onDevicePresenceChange: No info received");
+                            }
+                        }
+                    });
+
+
+                    Log.d(LOG_TAG, "onDevicePresenceChange pid=" + pid +
+                            " before=" + before +
+                            " after=" + after +
+                            " partnerVerified=" + partnerVerified);
+                }
+                else {
+                    Log.d(LOG_TAG, "onDevicePresenceChange: Device no longer present");
                     byte rowByte = 0, columnByte = 0;
                     int column = 0;
                     for (int row = 0; row < 2; row++) {
@@ -820,14 +868,9 @@ public class MainActivity extends Activity {
 
                     NymiAuthenticated.setEnabled(false);
                     NymiAuthenticated.setChecked(false);
-                }
 
-                Log.d(LOG_TAG, "onDevicePresenceChange pid=" + pid +
-                        " before=" + before +
-                        " after=" + after +
-                        " partnerVerified=" + partnerVerified);
                 }
-
+            }
 
         });
 
@@ -1006,3 +1049,4 @@ public class MainActivity extends Activity {
 
    }
 }
+
