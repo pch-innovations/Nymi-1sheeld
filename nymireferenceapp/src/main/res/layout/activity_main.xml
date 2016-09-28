@@ -155,11 +155,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PUSH BUTTON"
+        android:text="OPEN"
         android:id="@+id/btnSendToOneSheeld"
         android:layout_alignParentBottom="false"
-        android:layout_toEndOf="@+id/layout_main_provisions_label"
-        android:layout_below="@+id/layout_main_provision_list" />
+        android:layout_below="@+id/layout_main_provision_list"
+        android:layout_toRightOf="@+id/password" />
 
     <RadioButton
         android:layout_width="wrap_content"
@@ -170,25 +170,14 @@
         android:layout_alignEnd="@+id/layout_main_provision_list"
         android:enabled="false" />
 
-    <ToggleButton
+    <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="KEY"
-        android:id="@+id/btnkeypadtry2"
-        android:layout_alignParentBottom="false"
-        android:layout_alignTop="@+id/btnkeypadtry"
-        android:layout_toRightOf="@+id/btnkeypadtry"
-        android:buttonTint="#fc9b1c"
-        android:clickable="true" />
-
-    <ToggleButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="KEY"
-        android:id="@+id/btnkeypadtry"
-        android:layout_alignParentBottom="false"
-        android:layout_alignTop="@+id/btnSendToOneSheeld"
-        android:layout_toRightOf="@+id/btnSendToOneSheeld" />
+        android:inputType="numberPassword"
+        android:ems="10"
+        android:id="@+id/password"
+        android:layout_below="@+id/layout_main_provision_list"
+        android:layout_toEndOf="@+id/layout_main_provisions_label" />
 
 
 </RelativeLayout>

@@ -21,13 +21,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MotionEvent;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.util.Log;
@@ -43,6 +47,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+//import com.google.android.gms.appindexing.Action;
+//import com.google.android.gms.appindexing.AppIndex;
+//import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.nymi.api.NymiAdapter;
 import com.nymi.api.NymiConfigurationInfo;
@@ -98,6 +105,13 @@ public class MainActivity extends Activity {
     private byte keyPadShieldid = OneSheeldSdk.getKnownShields().KEYPAD_SHIELD.getId();
     private byte keyPadFunctionId = (byte) 0x01;
 
+    private EditText typePassword;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    //private GoogleApiClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,21 +137,31 @@ public class MainActivity extends Activity {
         // -------------------- 1Sheeld setup ------------------------
 
 
-
         final Button btnSendToOneSheeld = (Button) findViewById(R.id.btnSendToOneSheeld);
         btnSendToOneSheeld.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-                byte rowByte = 0, columnByte = 0;
-                int row =0;
-                int column =2;
+                //openDoorGreenLED()
 
-                    rowByte = BitsUtils.setBit(rowByte, row);
-                    columnByte = BitsUtils.setBit(columnByte,column);
-                    kp.addArgument(rowByte);
-                    kp.addArgument(columnByte);
-                oneSheeldDevice.sendShieldFrame(kp);
+
+                String typedPassword = String.valueOf(typePassword.getText());
+                String correctPassword = "1234";
+                if(typedPassword.equals(correctPassword)){
+                    openDoorGreenLED();
+                    Log.d(LOG_TAG, "correct password entered");
+                    Toast.makeText(MainActivity.this , "Correct! Welcome!",Toast.LENGTH_SHORT).show();
+                    startCountDown();
+                    typePassword.setText("");
+
+                }
+                else {
+                    Toast.makeText(MainActivity.this , "Wrong password",Toast.LENGTH_SHORT).show();
+                    Log.d(LOG_TAG, "wrong password entered");
+                    closeDoorGreenLED();
+                    turnOnRedLED();
+                    startCountDown();
+                    typePassword.setText("");
+                }
 
                 return false;
 
@@ -145,64 +169,8 @@ public class MainActivity extends Activity {
         });
 
 
-
-
-
-
-   // };
-
-        ToggleButton btnkeypadtry = (ToggleButton) findViewById(R.id.btnkeypadtry);
-        btnkeypadtry.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                byte rowByte = 0, columnByte = 0;
-                int row =0;
-                int column =1;
-
-                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-                if (isChecked) {
-
-                    rowByte = BitsUtils.setBit(rowByte, row);
-                    columnByte = BitsUtils.setBit(columnByte,column);
-                    kp.addArgument(rowByte);
-                    kp.addArgument(columnByte);
-                } else {
-                    rowByte = BitsUtils.resetBit(rowByte, row);
-                    columnByte = BitsUtils.resetBit(columnByte,column);
-                    kp.addArgument(rowByte);
-                    kp.addArgument(columnByte);
-                }
-                oneSheeldDevice.sendShieldFrame(kp);
-            }
-        });
-
-        ToggleButton btnkeypadtry2 = (ToggleButton) findViewById(R.id.btnkeypadtry2);
-        btnkeypadtry2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-
-                byte rowByte = 0, columnByte = 0;
-                int row =1;
-                int column =0;
-
-                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
-                if (isChecked) {
-
-                    rowByte = BitsUtils.setBit(rowByte, row);
-                    columnByte = BitsUtils.setBit(columnByte,column);
-                    kp.addArgument(rowByte);
-                    kp.addArgument(columnByte);
-                } else {
-                    rowByte = BitsUtils.resetBit(rowByte, row);
-                    columnByte = BitsUtils.resetBit(columnByte,column);
-                    kp.addArgument(rowByte);
-                    kp.addArgument(columnByte);
-                }
-                oneSheeldDevice.sendShieldFrame(kp);
-            }
-        });
-
+        typePassword = (EditText) findViewById(R.id.password);
+        //typePassword.addTextChangedListener(new );
 
         // Init the SDK with context
         OneSheeldSdk.init(this);
@@ -584,6 +552,9 @@ public class MainActivity extends Activity {
                 popup.show();
             }
         });
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        //client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
 
@@ -720,8 +691,8 @@ public class MainActivity extends Activity {
 
                 if (after == NymiDeviceInfo.FoundStatus.AUTHENTICATED) {
                     openDoorGreenLED();
-                }
-               else {
+                    startCountDown();
+                } else {
                     closeDoorGreenLED();
                 }
 
@@ -759,11 +730,13 @@ public class MainActivity extends Activity {
                                         NymiAuthenticated.setChecked(true);
 
                                         openDoorGreenLED();
+                                        startCountDown();
 
                                     } else {
 
                                         Log.d(LOG_TAG, "onDevicePresenceChange: Present but NOT authenticated");
-                                       yellowLEDON();
+                                        yellowLEDON();
+                                        startCountDown();
                                     }
 
                                 }
@@ -778,8 +751,7 @@ public class MainActivity extends Activity {
                             " before=" + before +
                             " after=" + after +
                             " partnerVerified=" + partnerVerified);
-                }
-                else {
+                } else {
                     Log.d(LOG_TAG, "onDevicePresenceChange: Device no longer present");
 
                     closeDoorGreenLED();
@@ -948,11 +920,55 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        /*
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.nymi.nymireferenceapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+        */
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        /*
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app URL is correct.
+                Uri.parse("android-app://com.nymi.nymireferenceapp/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+        */
+    }
+
     private class GServerSignupResponse {
         public String Ok;
     }
 
-    private void openDoorGreenLED () {
+    private void openDoorGreenLED() {
         byte rowByte = 0, columnByte = 0;
         int column = 0;
         for (int row = 0; row < 2; row++) {
@@ -963,13 +979,13 @@ public class MainActivity extends Activity {
             columnByte = BitsUtils.setBit(columnByte, column);
             kp.addArgument(rowByte);
             kp.addArgument(columnByte);
-            if(oneSheeldDevice != null) {
+            if (oneSheeldDevice != null) {
                 oneSheeldDevice.sendShieldFrame(kp);
             }
         }
     }
 
-    private void closeDoorGreenLED () {
+    private void closeDoorGreenLED() {
         byte rowByte = 0, columnByte = 0;
         int column = 0;
         for (int row = 0; row < 2; row++) {
@@ -980,13 +996,13 @@ public class MainActivity extends Activity {
             columnByte = BitsUtils.resetBit(columnByte, column);
             kp.addArgument(rowByte);
             kp.addArgument(columnByte);
-            if(oneSheeldDevice != null) {
+            if (oneSheeldDevice != null) {
                 oneSheeldDevice.sendShieldFrame(kp);
             }
         }
     }
 
-    private void yellowLEDON () {
+    private void yellowLEDON() {
         byte rowByte = 0, columnByte = 0;
         int column = 1;
         int row = 0;
@@ -997,12 +1013,12 @@ public class MainActivity extends Activity {
         columnByte = BitsUtils.setBit(columnByte, column);
         kp.addArgument(rowByte);
         kp.addArgument(columnByte);
-        if(oneSheeldDevice != null) {
+        if (oneSheeldDevice != null) {
             oneSheeldDevice.sendShieldFrame(kp);
         }
     }
 
-    private void yellowLEDOFF () {
+    private void yellowLEDOFF() {
         byte rowByte = 0, columnByte = 0;
         int column = 1;
         int row = 0;
@@ -1013,24 +1029,75 @@ public class MainActivity extends Activity {
         columnByte = BitsUtils.resetBit(columnByte, column);
         kp.addArgument(rowByte);
         kp.addArgument(columnByte);
-        if(oneSheeldDevice != null) {
+        if (oneSheeldDevice != null) {
             oneSheeldDevice.sendShieldFrame(kp);
         }
     }
 
+    private void turnOnRedLED() {
+        byte rowByte = 0, columnByte = 0;
+        int column = 2;
+        int row = 0;
 
-   private static class BitsUtils {
+        ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
 
-       public static byte setBit(byte b, int bit) {
-           if (bit < 0 || bit >= 8) return b;
-           return (byte) (b | (1 << bit));
-       }
+        rowByte = BitsUtils.setBit(rowByte, row);
+        columnByte = BitsUtils.setBit(columnByte, column);
+        kp.addArgument(rowByte);
+        kp.addArgument(columnByte);
+        if (oneSheeldDevice != null) {
+            oneSheeldDevice.sendShieldFrame(kp);
+        }
+    }
 
-       public static byte resetBit(byte b, int bit) {
-           if (bit < 0 || bit >= 8) return b;
-           return (byte) (b & (~(1 << bit)));
-       }
+    private void startCountDown() {
 
-   }
+        new CountDownTimer(3000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                //Toast.makeText(MainActivity.this, "door closes in: " + millisUntilFinished / 1000, Toast.LENGTH_SHORT).show();
+
+            }
+
+            public void onFinish() {
+                resetAllFrames();
+                //Toast.makeText(MainActivity.this, "too slow :D", Toast.LENGTH_SHORT).show();
+            }
+        }.start();
+    }
+
+    private void resetAllFrames() {
+        byte rowByte = 0, columnByte = 0;
+        for(int column = 0; column<4; column++) {
+            for (int row = 0; row < 5; row++) {
+
+                ShieldFrame kp = new ShieldFrame(keyPadShieldid, keyPadFunctionId);
+
+                rowByte = BitsUtils.resetBit(rowByte, row);
+                columnByte = BitsUtils.resetBit(columnByte, column);
+                kp.addArgument(rowByte);
+                kp.addArgument(columnByte);
+                if (oneSheeldDevice != null) {
+                    oneSheeldDevice.sendShieldFrame(kp);
+                }
+            }
+        }
+
+    }
+
+    private static class BitsUtils {
+
+        public static byte setBit(byte b, int bit) {
+            if (bit < 0 || bit >= 8) return b;
+            return (byte) (b | (1 << bit));
+        }
+
+        public static byte resetBit(byte b, int bit) {
+            if (bit < 0 || bit >= 8) return b;
+            return (byte) (b & (~(1 << bit)));
+        }
+
+    }
 }
 
